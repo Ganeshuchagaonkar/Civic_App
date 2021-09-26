@@ -17,6 +17,7 @@ class _SignupState extends State<Signup> {
   String role = "citizen";
   String username;
   String email;
+  String adhar;
   String password;
   bool isloading = false;
   int phone;
@@ -27,6 +28,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _adharController = TextEditingController();
 
   @override
   void initState() {
@@ -66,17 +68,19 @@ class _SignupState extends State<Signup> {
     
   }
 
-  void signUpRequest(String name, String email, int phone, String password) async {
+  void signUpRequest(String name, String email, int phone, String password,String adhar) async {
   
     var data = jsonEncode({
       "name": name,
       "email": email,
+      "adhar":adhar,
       "phone": phone,
       "country": country,
       "State_id": statevalue.toInt(),
       "city_id": cityvalue.toInt(),
       "password": password,
       "role":role,
+
     });
     var response = await http.post(
       Uri.http("192.168.43.187:8000", "users/adduser/"),
@@ -259,6 +263,27 @@ class _SignupState extends State<Signup> {
                       ),
                     ),
                   ),
+                  SizedBox(height:20),
+                   Material(
+                    elevation: 5,
+                    shadowColor: Colors.grey,
+                    child: TextFormField(
+                      validator: validateEmail,
+                      controller: _adharController,
+                      keyboardType: TextInputType.text,
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                        prefixIcon:
+                            Icon(Icons.email, size: 20, color: Colors.black),
+                        border: InputBorder.none,
+                        fillColor: Colors.white,
+                        filled: true,
+                        hintStyle: TextStyle(color: Colors.grey),
+                        hintText: 'AdharCard Number',
+                        labelText: 'AdharCard',
+                      ),
+                    ),
+                  ),
                   SizedBox(height: 20),
                   Row(
                     children: [
@@ -406,8 +431,9 @@ class _SignupState extends State<Signup> {
                         username = _nameController.text;
                         email = _emailController.text;
                         password = _passController.text;
+                        adhar = _adharController.text;
                         phone = int.parse(_phoneController.text);
-                         signUpRequest(username,email,phone,password);
+                         signUpRequest(username,email,phone,password, adhar);
                       }
                     },
                   )
