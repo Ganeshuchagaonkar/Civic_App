@@ -39,10 +39,11 @@ void initState() {
       },);
       final data=jsonDecode(response.body);
       
-    
+    print(data);
       if(data['role']=="citizen")
       { 
-         Navigator.pushNamed(context, '/citizenDashboard/AddComplaints');
+        
+         Navigator.pushNamed(context, '/citizenDashboard');
           SharedPreferences prefs=await SharedPreferences.getInstance();
            prefs.setString("Refreshtoken",data['refresh']);
            prefs.setString("Accesstoken", data['access']);
@@ -52,23 +53,17 @@ void initState() {
            prefs.setString("citizencountry",data["country"]);
            prefs.setString("citizenState", data['state']);
            prefs.setString("citizenCity", data['city']);
-
-          //  print(prefs.setInt("city",data['city_id']));
-          //  prefs.setInt("state", data['state_id']);
+           prefs.setInt("userid", data['user_id']);
+           prefs.setInt("city",data['city_id']);
+           prefs.setInt("state", data['state_id']);
            
-           setState(() {
-              token =prefs.getString("Refreshtoken");
-              // print(prefs.getInt("citizenphone"));
-              print(token);
-           });
+          
            
           ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
-          // width: 300.0,
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
           
-          // padding: const EdgeInsets.symmetric(
-          //     horizontal: 10.0, // Inner padding for SnackBar content.
-          //   ),
          behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -77,14 +72,26 @@ void initState() {
         ));
        
       }
-      if(data['role']=="admin"){
-        print(data);
+      
+      
+      else if(data['role']=="admin"){
+       
         Navigator.pushNamed(context, '/Admin/Home');
-             print("Admin Dashboard");
+        
+            ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
            }
-      if(data['role']=="officer"){
-        print("officer dashboard");
-        print(data);
+      else if(data['role']=="officer"){
+      
         final SharedPreferences prefs=await SharedPreferences.getInstance();
         prefs.setString("officername", data['name']);
         prefs.setString("officeremail", data['email']);
@@ -92,8 +99,34 @@ void initState() {
         prefs.setString("officercountry", data['country']);
         prefs.setString("officerstate", data['state']);
         prefs.setString("officercity", data['city']);
+        prefs.setInt(("userid"),data['user_id']);
         Navigator.pushNamed(context, '/officerDashboard');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green[300],
+            content:const Text("Loged in Successfully..!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
       }
+      else{
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red[300],
+            content:const Text("Invalid username & Password!",style: TextStyle(fontWeight: FontWeight.bold),),
+          
+         behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+       
+        ));
+      }
+      
            
 
   }
@@ -174,37 +207,37 @@ void initState() {
                     
                     
                    
-                    Material(
-                         elevation: 5,
-                        shadowColor: Colors.grey,
-                        child: DropdownButtonFormField(
+                    // Material(
+                    //      elevation: 5,
+                    //     shadowColor: Colors.grey,
+                    //     child: DropdownButtonFormField(
                           
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.fromLTRB(10, 16, 10, 16),
-                            border: InputBorder.none,
-                            filled: true,
-                             prefixIcon: Icon(
-                              Icons.arrow_downward_rounded,
-                              size: 25,
-                              color: Colors.black
-                            ),
+                    //       decoration: InputDecoration(
+                    //         contentPadding: EdgeInsets.fromLTRB(10, 16, 10, 16),
+                    //         border: InputBorder.none,
+                    //         filled: true,
+                    //          prefixIcon: Icon(
+                    //           Icons.arrow_downward_rounded,
+                    //           size: 25,
+                    //           color: Colors.black
+                    //         ),
                             
-                            hintStyle: TextStyle(color: Colors.grey),
-                            hintText: "Choose UserType",
-                            fillColor: Colors.white,
-                          ),
-                          value: dropDownValue,
-                          onChanged: (String value) {
-                            setState(() {
-                              dropDownValue = value;
-                            });
-                          },
-                          items: userType
-                              .map((item) => DropdownMenuItem(
-                                  value: item, child: Text("$item")))
-                              .toList(),
-                        ),
-                      ),
+                    //         hintStyle: TextStyle(color: Colors.grey),
+                    //         hintText: "Choose UserType",
+                    //         fillColor: Colors.white,
+                    //       ),
+                    //       value: dropDownValue,
+                    //       onChanged: (String value) {
+                    //         setState(() {
+                    //           dropDownValue = value;
+                    //         });
+                    //       },
+                    //       items: userType
+                    //           .map((item) => DropdownMenuItem(
+                    //               value: item, child: Text("$item")))
+                    //           .toList(),
+                    //     ),
+                    //   ),
                       SizedBox(
                       height: 20.0,
                     ),
